@@ -1,0 +1,16 @@
+import pandas as pd
+from anonymizedf.anonymizedf import anonymize
+
+# Import the data
+df = pd.read_excel("./demo_files/מעקב דיווחים.xlsx")
+
+# Prepare the data to be anonymized
+an = anonymize(df)
+
+# Select what data you want to anonymize and your preferred style
+
+# Example 1 - just updates df
+an.fake_names("שם")
+
+
+df.to_excel("./demo_files/מעקב דיווחים.xlsx")
