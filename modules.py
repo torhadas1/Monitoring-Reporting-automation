@@ -190,7 +190,7 @@ def clients2columns_changemat(df, clients_df):
 
 
 def run_yeshut(check, client, business_info, reported):
-    directories = pd.read_excel("directories.xlsx")
+    directories = pd.read_excel("./directories.xlsx")
     directories = pd.DataFrame(directories)
     directories = directories.set_index("File type")
     rc_directory = directories.loc["risk countries"].values[0]
