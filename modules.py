@@ -202,20 +202,20 @@ def run_yeshut(check, client, business_info, reported):
     yeshut_directory = directories.loc["yeshut content and change names"].values[0]
 
     # reading the risk country file
-    filepath_check = fsp_directory + "\*נותני*"
+    filepath_check = fsp_directory + "/*נותני*"
     txt_check = glob.glob(filepath_check)
     for textfile in txt_check:
         fsp_list = pd.read_excel(textfile)
 
     # reading the risk country file
-    filepath_check = rc_directory + "\*מדינות*"
+    filepath_check = rc_directory + "/*מדינות*"
     txt_check = glob.glob(filepath_check)
     for textfile in txt_check:
         rc = pd.read_excel(textfile)
 
     st.dataframe(rc)
     # reading the report content file
-    filepath_check = yeshut_directory + "\*content*"
+    filepath_check = yeshut_directory + "/*content*"
     txt_check = glob.glob(filepath_check)
     for textfile in txt_check:
         content = pd.read_excel(textfile)
