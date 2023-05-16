@@ -4,7 +4,6 @@ import glob
 import sys
 import io
 import subprocess
-import tkinter.messagebox
 import warnings
 from sys import exit
 import docx
@@ -1420,7 +1419,7 @@ def run_yeshut(check, client, business_info, reported):
         on="clients name",
         how="left",
     )
-    final_reports4word = final_reports4word.drop_duplicates('cumsum')
+    final_reports4word = final_reports4word.drop_duplicates("cumsum")
     final_reports4word = final_reports4word.set_index("cumsum")
     doc_df = doc_df.set_index("file_name")
     for title in ls_cumsum:
@@ -1460,7 +1459,6 @@ def run_yeshut(check, client, business_info, reported):
             + ".docx"
         )
         doc = docx.Document(doc_df.loc[file_name].values[0])
-
 
         doc.add_page_break()
         t = doc.add_table(orderd.shape[0] + 1, orderd.shape[1])
