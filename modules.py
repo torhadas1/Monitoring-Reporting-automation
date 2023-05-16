@@ -192,6 +192,7 @@ def clients2columns_changemat(df, clients_df):
 def run_yeshut(check, client, business_info, reported):
     directories = pd.read_excel("./directories.xlsx")
     directories = pd.DataFrame(directories)
+    st.dataframe(directories)
     directories = directories.set_index("File type")
     rc_directory = directories.loc["risk countries"].values[0]
     fsp_directory = directories.loc["financial service providers"].values[0]
@@ -212,6 +213,7 @@ def run_yeshut(check, client, business_info, reported):
     for textfile in txt_check:
         rc = pd.read_excel(textfile)
 
+    st.dataframe(rc)
     # reading the report content file
     filepath_check = yeshut_directory + "\*content*"
     txt_check = glob.glob(filepath_check)
