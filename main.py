@@ -19,7 +19,6 @@ from modules import *
 from io import BytesIO
 
 
-
 def upload_locked(uploaded_file, password):
     decrypted_workbook = io.BytesIO()
     office_file = msoffcrypto.OfficeFile(uploaded_file)
@@ -33,12 +32,15 @@ def upload_locked(uploaded_file, password):
 def main():
     # reading the logo image
     st.set_page_config(
-    initial_sidebar_state="expanded", 
-    page_title = 'מערכת לניטור דיווחים בלתי רגילים',
-    page_icon = 'fav.jfif',
-    menu_items = {'Report a bug': 'mailto:talya@tovtech.org',
-                  'Get help': None,
-                  'About': 'https://tovtech.org/en'})
+        initial_sidebar_state="expanded",
+        page_title="מערכת לניטור דיווחים בלתי רגילים",
+        page_icon="fav.jfif",
+        menu_items={
+            "Report a bug": "mailto:talya@tovtech.org",
+            "Get help": None,
+            "About": "https://tovtech.org/en",
+        },
+    )
 
     hide_streamlit_style = """
                 <style>
@@ -50,83 +52,94 @@ def main():
     logo, title_text = st.columns([1, 3])
 
     with logo:
-        st.markdown("""
+        st.markdown(
+            """
             <a href = 'https://tovtech.org/en/'>
             <img src='https://tovtech.org/wp-content/uploads/2022/04/3-tovtech-logo-blue-e1651390125630.png', width = "100%"></a>
-        """, unsafe_allow_html  = True)
+        """,
+            unsafe_allow_html=True,
+        )
 
     with title_text:
-        st.header('מערכת לניטור דיווחים בלתי רגילים')
+        st.header("מערכת לניטור דיווחים בלתי רגילים")
 
+    st.markdown("---")
 
- 
     top_left, top_right = st.columns(2)
     # a widget for reading multiple files
     with top_left:
-        info_upload = st.file_uploader('Choose **Business Info** file:')
+        info_upload = st.file_uploader("Choose **Business Info** file:")
+        info_upload = "./demo_files/business information.xlsx"
         if info_upload is not None:
             business_info = pd.read_excel(info_upload)
 
             # defining the "fields" column of the business_info df as index
-            business_info = business_info.set_index('fields')
+            business_info = business_info.set_index("fields")
 
             # defining password as a variable containing the clients' id number
-            password = business_info.loc['מספר מזהה של הגורם המדווח'].values[0]
+            password = business_info.loc["מספר מזהה של הגורם המדווח"].values[0]
 
-        tr_upload = st.file_uploader('Choose **Transaction** file:')
+        tr_upload = st.file_uploader("Choose **Transaction** file:")
+        tr_upload = "./demo_files/שקים.xlsx"
         if tr_upload is not None:
             try:
                 check = upload_locked(tr_upload, str(password))
             except:
                 check = pd.read_excel(tr_upload)
 
-
     with top_right:
-        client_upload = st.file_uploader('Choose **Clients** file:')
+        client_upload = st.file_uploader("Choose **Clients** file:")
+        client_upload = "./demo_files/לקוחות.xlsx"
         if client_upload is not None:
             try:
                 client = upload_locked(client_upload, str(password))
             except:
                 client = pd.read_excel(client_upload)
 
-        reported_upload = st.file_uploader('Choose **Reported** file:')
+        reported_upload = st.file_uploader("Choose **Reported** file:")
+        reported_upload = "./demo_files/מעקב דיווחים.xlsx"
         if reported_upload is not None:
             try:
                 reported = upload_locked(reported_upload, str(password))
             except:
                 reported = pd.read_excel(reported_upload)
 
+    st.markdown("---")
 
-    st.markdown('---')
+    module = st.selectbox(
+        "Please choose the desired module",
+        options=["Yeshut", "Cox", "Changemat", "G_Money", "Yeshut Exchange"],
+    )
 
-
-    module = st.selectbox('Please choose the desired module',
-                          options=['Yeshut', 'Cox', 'Changemat', 'G_Money', 'Yeshut Exchange'])
-
-    st.markdown("""<style>
+    st.markdown(
+        """<style>
                     div.stButton > button:first-child {
                     width : 100px;
-                    height:40px;}</style>""", unsafe_allow_html=True)
-
+                    height:40px;}</style>""",
+        unsafe_allow_html=True,
+    )
 
     col1, col2, col3 = st.columns([2, 1, 2])
     with col2:
-        run = st.button('Run', type='primary')
+        run = st.button("Run", type="primary")
     if run:
-        if module == 'Yeshut':
+        if module == "Yeshut":
             run_yeshut(check, client, business_info, reported)
-        elif module == 'G_Money':
+        elif module == "G_Money":
             run_gmt(check, business_info, reported)
-        elif module == 'Changemat':
+        elif module == "Changemat":
             run_changemat(check, client, business_info, reported)
-        elif module == 'Cox':
+        elif module == "Cox":
             run_cox(check, client, business_info, reported)
-########## FOOTER ##########
+    ########## FOOTER ##########
 
     footer = st.container()
 
     with footer:
+        st.write(
+            "[Contact Us 📝](mailto:talya@tovtech.org) | [Report a bug 🐛](mailto:talya@tovtech.org) | [About Us](https://tovtech.org/en)"
+        )
 
-        st.write('[Contact Us 📝](mailto:talya@tovtech.org) | [Report a bug 🐛](mailto:talya@tovtech.org) | [About Us](https://tovtech.org/en)')
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
